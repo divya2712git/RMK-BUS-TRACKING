@@ -24,7 +24,7 @@
       text-align: center;
       color: #00695c;
     }
-    input[type=text], button {
+    input[type="text"], button {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -38,7 +38,6 @@
       border: none;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
-      border-radius: 10px;
       position: relative;
       overflow: hidden;
     }
@@ -47,7 +46,6 @@
       transform: scale(1.02);
     }
     label {
-      margin-right: 10px;
       color: #444;
     }
     .bus-card {
@@ -96,10 +94,9 @@
     iframe {
       width: 100%;
       height: 500px;
-      border: none;
+      border: 4px solid;
       border-radius: 16px;
       margin-top: 10px;
-      border: 4px solid;
       border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
       animation: rainbowBorder 10s linear infinite;
     }
@@ -107,10 +104,6 @@
       0% { border-image-source: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); }
       50% { border-image-source: linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red); }
       100% { border-image-source: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); }
-    }
-    .map-container {
-      margin-top: 30px;
-      text-align: center;
     }
     .no-results {
       background-color: #ffffff;
@@ -121,14 +114,7 @@
       color: #444;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
-    .no-results strong {
-      color: #000;
-    }
-    .no-results button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border-radius: 10px;
-    }
+    .no-results strong { color: #000; }
     .flower {
       position: absolute;
       width: 20px;
@@ -136,11 +122,11 @@
       background-image: url('https://cdn-icons-png.flaticon.com/512/616/616408.png');
       background-size: contain;
       background-repeat: no-repeat;
-      animation: floatUp 1s linear forwards;
+      animation: floatUp 1s ease-out forwards;
     }
     @keyframes floatUp {
       0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-100px); opacity: 0; }
+      100% { transform: translateY(-80px); opacity: 0; }
     }
     @media (max-width: 600px) {
       .container { margin: 20px; }
@@ -151,6 +137,7 @@
 
 <div class="container" id="loginScreen">
   <h2>Login</h2>
+  <label for="rollNumber">Roll Number</label>
   <input type="text" id="rollNumber" placeholder="Enter 12-digit Roll Number" />
   <button onclick="validateRollNumber()">Login</button>
   <p id="loginError"></p>
@@ -164,15 +151,23 @@
     <label><input type="radio" name="direction" value="from"> From College</label>
   </div>
   <button onclick="searchBuses()">Search</button>
+
   <div class="routes-link">
-    <p>View all official RMK bus routes: <a href="https://www.rmkec.ac.in/cam/routes.html" target="_blank">Bus Route Details</a></p>
+    <p>View all official RMK bus routes: 
+      <a href="https://www.rmkec.ac.in/cam/routes.html" target="_blank">Bus Route Details</a>
+    </p>
   </div>
+
   <div class="routes-embed">
     <iframe src="https://www.rmkec.ac.in/cam/routes.html"></iframe>
   </div>
+
   <div class="map-container">
     <h2>RMK Campus Location</h2>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.338086257381!2d80.04707327590332!3d13.317878486781967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f4f27f1f6b95%3A0x2ac68d12a652dd58!2sRMK%20Engineering%20College!5e0!3m2!1sen!2sin!4v1722068439931!5m2!1sen!2sin" allowfullscreen></iframe>
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.338086257381!2d80.04707327590332!3d13.317878486781967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f4f27f1f6b95%3A0x2ac68d12a652dd58!2sRMK%20Engineering%20College!5e0!3m2!1sen!2sin!4v1722068439931!5m2!1sen!2sin" 
+      allowfullscreen>
+    </iframe>
   </div>
 </div>
 
@@ -206,7 +201,8 @@
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("searchScreen").classList.remove("hidden");
     } else {
-      document.getElementById("loginError").innerText = "Invalid Roll Number format. It should be 12 digits like 111724104055.";
+      document.getElementById("loginError").innerText = 
+        "Invalid Roll Number format. It should be 12 digits like 111724104055.";
     }
   }
 
@@ -216,37 +212,44 @@
     document.getElementById("searchScreen").classList.add("hidden");
     document.getElementById("resultsScreen").classList.remove("hidden");
 
-    const matchingBuses = busData.filter(b => b.route === routeInput || b.number === routeInput);
+    const matchingBuses = busData.filter(b => 
+      b.route === routeInput || b.number === routeInput
+    );
 
-    if (matchingBuses.length === 0) {
-      document.getElementById("results").innerHTML = `
-        <div class="no-results">
-          <p>No buses found for route: <strong>${routeInput}</strong></p>
-          <button onclick="goBack()">Back to Search</button>
-        </div>`;
-    } else {
-      document.getElementById("results").innerHTML = matchingBuses.map(b => `
-        <div class='bus-card'>
-          <div class='flex'><strong>Bus ${b.number}</strong><button onclick="toggleBoard(this, event)">Board</button></div>
-          <p>Route: ${b.route} (${direction === 'to' ? 'To College' : 'From College'})</p>
-          <div class='highlight-box'>Capacity: ${b.capacity} | Onboarded: ${b.onboarded} | Available: ${b.capacity - b.onboarded}</div>
+    const results = document.getElementById("results");
+    results.innerHTML = matchingBuses.length === 0 ? `
+      <div class="no-results">
+        <p>No buses found for route: <strong>${routeInput}</strong></p>
+        <button onclick="goBack()">Back to Search</button>
+      </div>
+    ` : matchingBuses.map(b => `
+      <div class='bus-card'>
+        <div class='flex'>
+          <strong>Bus ${b.number}</strong>
+          <button onclick="toggleBoard(this, event)">Board</button>
         </div>
-      `).join('');
-    }
+        <p>Route: ${b.route} (${direction === 'to' ? 'To College' : 'From College'})</p>
+        <div class='highlight-box'>
+          Capacity: ${b.capacity} | Onboarded: ${b.onboarded} | Available: ${b.capacity - b.onboarded}
+        </div>
+      </div>
+    `).join('');
   }
 
   function toggleBoard(btn, event) {
     const rect = btn.getBoundingClientRect();
-    for (let i = 0; i < 8; i++) {
-      const flower = document.createElement('div');
-      flower.className = 'flower';
-      flower.style.left = `${event.offsetX}px`;
-      flower.style.top = `${event.offsetY}px`;
+    const offsetX = event.clientX - rect.left;
+    const offsetY = event.clientY - rect.top;
+    for (let i = 0; i < 6; i++) {
+      const flower = document.createElement("div");
+      flower.className = "flower";
+      flower.style.left = `${offsetX}px`;
+      flower.style.top = `${offsetY}px`;
       btn.appendChild(flower);
       setTimeout(() => flower.remove(), 1000);
     }
-    btn.innerText = btn.innerText === "Board" ? "Deboard" : "Board";
-    btn.style.backgroundColor = btn.innerText === "Board" ? "#009688" : "#d32f2f";
+    btn.textContent = btn.textContent === "Board" ? "Deboard" : "Board";
+    btn.style.backgroundColor = btn.textContent === "Board" ? "#009688" : "#d32f2f";
   }
 
   function goBack() {
