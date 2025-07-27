@@ -24,7 +24,7 @@
       text-align: center;
       color: #00695c;
     }
-    input[type="text"], button {
+    input[type=text], button {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -38,15 +38,10 @@
       border: none;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
     }
     button:hover {
       background-color: #00796b;
       transform: scale(1.02);
-    }
-    label {
-      color: #444;
     }
     .bus-card {
       border: 2px solid #80cbc4;
@@ -54,11 +49,6 @@
       margin: 10px 0;
       border-radius: 16px;
       background-color: #e0f2f1;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .bus-card:hover {
-      transform: scale(1.01);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
     .highlight-box {
       background-color: #f1f8e9;
@@ -79,7 +69,7 @@
       color: red;
       font-weight: bold;
     }
-    .routes-link, .routes-embed {
+    .routes-link {
       text-align: center;
       margin-top: 20px;
     }
@@ -88,22 +78,11 @@
       text-decoration: none;
       font-weight: bold;
     }
-    .routes-link a:hover {
-      text-decoration: underline;
-    }
     iframe {
       width: 100%;
       height: 500px;
-      border: 4px solid;
       border-radius: 16px;
       margin-top: 10px;
-      border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
-      animation: rainbowBorder 10s linear infinite;
-    }
-    @keyframes rainbowBorder {
-      0% { border-image-source: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); }
-      50% { border-image-source: linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red); }
-      100% { border-image-source: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); }
     }
     .no-results {
       background-color: #ffffff;
@@ -112,24 +91,9 @@
       padding: 20px;
       text-align: center;
       color: #444;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
-    .no-results strong { color: #000; }
-    .flower {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-image: url('https://cdn-icons-png.flaticon.com/512/616/616408.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: floatUp 1s ease-out forwards;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-80px); opacity: 0; }
-    }
-    @media (max-width: 600px) {
-      .container { margin: 20px; }
+    .no-results button {
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -137,7 +101,6 @@
 
 <div class="container" id="loginScreen">
   <h2>Login</h2>
-  <label for="rollNumber">Roll Number</label>
   <input type="text" id="rollNumber" placeholder="Enter 12-digit Roll Number" />
   <button onclick="validateRollNumber()">Login</button>
   <p id="loginError"></p>
@@ -151,28 +114,15 @@
     <label><input type="radio" name="direction" value="from"> From College</label>
   </div>
   <button onclick="searchBuses()">Search</button>
-
   <div class="routes-link">
-    <p>View all official RMK bus routes: 
-      <a href="https://www.rmkec.ac.in/cam/routes.html" target="_blank">Bus Route Details</a>
-    </p>
+    <p>View all routes: <a href="https://www.rmkec.ac.in/cam/routes.html" target="_blank">Bus Route Details</a></p>
   </div>
-
-  <div class="routes-embed">
-    <iframe src="https://www.rmkec.ac.in/cam/routes.html"></iframe>
-  </div>
-
-  <div class="map-container">
-    <h2>RMK Campus Location</h2>
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.338086257381!2d80.04707327590332!3d13.317878486781967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52f4f27f1f6b95%3A0x2ac68d12a652dd58!2sRMK%20Engineering%20College!5e0!3m2!1sen!2sin!4v1722068439931!5m2!1sen!2sin" 
-      allowfullscreen>
-    </iframe>
-  </div>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18..." allowfullscreen></iframe>
 </div>
 
 <div class="container hidden" id="resultsScreen">
   <h2>Available Buses</h2>
+  <button onclick="goBack()">🔙 Back to Search</button>
   <div id="results"></div>
 </div>
 
@@ -180,81 +130,59 @@
   const busData = [
     { number: "101", route: "avadi", capacity: 50, onboarded: 10 },
     { number: "102", route: "tambaram", capacity: 50, onboarded: 15 },
-    { number: "103", route: "annanagar", capacity: 50, onboarded: 20 },
-    { number: "104", route: "velachery", capacity: 50, onboarded: 5 },
-    { number: "105", route: "ambattur", capacity: 50, onboarded: 18 },
-    { number: "106", route: "thiruvallur", capacity: 50, onboarded: 22 },
-    { number: "107", route: "poonamallee", capacity: 50, onboarded: 12 },
-    { number: "108", route: "guindy", capacity: 50, onboarded: 30 },
-    { number: "109", route: "mylapore", capacity: 50, onboarded: 25 },
-    { number: "110", route: "adyar", capacity: 50, onboarded: 19 },
-    { number: "111", route: "chrompet", capacity: 50, onboarded: 17 },
-    { number: "112", route: "egmore", capacity: 50, onboarded: 28 },
-    { number: "165", route: "perambur", capacity: 50, onboarded: 7 }
+    { number: "103", route: "annanagar", capacity: 50, onboarded: 20 }
   ];
 
   function validateRollNumber() {
     const roll = document.getElementById("rollNumber").value.trim();
     const pattern = /^\d{12}$/;
     if (pattern.test(roll)) {
-      localStorage.setItem("rollNumber", roll);
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("searchScreen").classList.remove("hidden");
     } else {
-      document.getElementById("loginError").innerText = 
-        "Invalid Roll Number format. It should be 12 digits like 111724104055.";
+      document.getElementById("loginError").innerText = "Roll number should be 12 digits.";
     }
   }
 
   function searchBuses() {
     const routeInput = document.getElementById("route").value.trim().toLowerCase();
     const direction = document.querySelector('input[name="direction"]:checked').value;
+    const resultsDiv = document.getElementById("results");
+
     document.getElementById("searchScreen").classList.add("hidden");
     document.getElementById("resultsScreen").classList.remove("hidden");
 
-    const matchingBuses = busData.filter(b => 
-      b.route === routeInput || b.number === routeInput
-    );
+    const matchingBuses = busData.filter(b => b.route === routeInput || b.number === routeInput);
 
-    const results = document.getElementById("results");
-    results.innerHTML = matchingBuses.length === 0 ? `
-      <div class="no-results">
-        <p>No buses found for route: <strong>${routeInput}</strong></p>
-        <button onclick="goBack()">Back to Search</button>
-      </div>
-    ` : matchingBuses.map(b => `
-      <div class='bus-card'>
-        <div class='flex'>
-          <strong>Bus ${b.number}</strong>
-          <button onclick="toggleBoard(this, event)">Board</button>
+    if (matchingBuses.length === 0) {
+      resultsDiv.innerHTML = `
+        <div class="no-results">
+          <p>No buses found for: <strong>${routeInput}</strong></p>
+        </div>`;
+    } else {
+      resultsDiv.innerHTML = matchingBuses.map(b => `
+        <div class='bus-card'>
+          <div class='flex'>
+            <strong>Bus ${b.number}</strong>
+            <button onclick="toggleBoard(this)">Board</button>
+          </div>
+          <p>Route: ${b.route} (${direction === 'to' ? 'To College' : 'From College'})</p>
+          <div class='highlight-box'>Capacity: ${b.capacity}, Onboarded: ${b.onboarded}, Available: ${b.capacity - b.onboarded}</div>
         </div>
-        <p>Route: ${b.route} (${direction === 'to' ? 'To College' : 'From College'})</p>
-        <div class='highlight-box'>
-          Capacity: ${b.capacity} | Onboarded: ${b.onboarded} | Available: ${b.capacity - b.onboarded}
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
   }
 
-  function toggleBoard(btn, event) {
-    const rect = btn.getBoundingClientRect();
-    const offsetX = event.clientX - rect.left;
-    const offsetY = event.clientY - rect.top;
-    for (let i = 0; i < 6; i++) {
-      const flower = document.createElement("div");
-      flower.className = "flower";
-      flower.style.left = `${offsetX}px`;
-      flower.style.top = `${offsetY}px`;
-      btn.appendChild(flower);
-      setTimeout(() => flower.remove(), 1000);
-    }
-    btn.textContent = btn.textContent === "Board" ? "Deboard" : "Board";
-    btn.style.backgroundColor = btn.textContent === "Board" ? "#009688" : "#d32f2f";
+  function toggleBoard(button) {
+    button.innerText = button.innerText === "Board" ? "Deboard" : "Board";
+    button.style.backgroundColor = button.innerText === "Board" ? "#009688" : "#d32f2f";
   }
 
   function goBack() {
     document.getElementById("resultsScreen").classList.add("hidden");
     document.getElementById("searchScreen").classList.remove("hidden");
+    document.getElementById("route").value = '';
+    document.querySelector('input[name="direction"][value="to"]').checked = true;
   }
 </script>
 
