@@ -184,7 +184,10 @@
     document.getElementById("searchScreen").classList.add("hidden");
     document.getElementById("resultsScreen").classList.remove("hidden");
 
-    const matchingBuses = busData.filter(b => b.route === routeInput || b.number === routeInput);
+    const matchingBuses = busData.filter(
+  b => b.route.toLowerCase() === routeInput || b.number === routeInput
+);
+
 
     if (matchingBuses.length === 0) {
       resultsDiv.innerHTML = `
